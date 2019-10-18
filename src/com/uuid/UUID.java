@@ -67,9 +67,6 @@ public class UUID implements Comparable, Serializable {
 	}     
     }
     
-    /**
-    * Generate a new UUID
-    */
     public UUID() {
 	nodeId = new byte[6];
 	this.generate();
@@ -107,8 +104,7 @@ public class UUID implements Comparable, Serializable {
 	}
     }
 	    
-    private void generate()
-    {   
+    private void generate() {
 	UUIDGenerator gener = UUIDGenerator.create();
 	gener.generate(this);
     }
@@ -120,20 +116,17 @@ public class UUID implements Comparable, Serializable {
 
     * @return String version of UUID
     */
-    public String toString()
-    {
+    public String toString() {
 	Object nodeArgs[] = {
 	    toHex(nodeId[0]), toHex(nodeId[1]), toHex(nodeId[2]),
 	    toHex(nodeId[3]), toHex(nodeId[4]), toHex(nodeId[5])
 			    };		
-	String nodeString = 
-	    MessageFormat.format("{0}{1}{2}{3}{4}{5}", nodeArgs);
+	String nodeString = MessageFormat.format("{0}{1}{2}{3}{4}{5}", nodeArgs);
 
 	Object args[] = {
 	    toHex(timeLow), toHex(timeMid), toHex(timeHiAndVersion),
-	    toHex(clockSeqHiAndReserved), toHex(clockSeqLow),
-	    nodeString
-			};		
+	    toHex(clockSeqHiAndReserved), toHex(clockSeqLow), nodeString
+	};		
 
 	return MessageFormat.format("{0}-{1}-{2}-{3}{4}-{5}", args);
     }
@@ -353,13 +346,13 @@ public class UUID implements Comparable, Serializable {
 	    nodeId[5] = 0x77;
             */
             // Генерация через MAC адрес            
-            // 8C-DC-D4-55-16-C5 MAC адрес
-            nodeId[0]=(byte)0x8c;  
+            // пример: MAC адрес 2C-DC-D4-55-16-C5
+            nodeId[0]=(byte)0x2c;
             nodeId[1]=(byte)0xdc;
             nodeId[2]=(byte)0xd4;
             nodeId[3]=(byte)0x55;
-            nodeId[4]=(byte)0x17;
-            nodeId[5]=(byte)0xc4;
+            nodeId[4]=(byte)0x16;
+            nodeId[5]=(byte)0xc5;
 	}
     }
 }
