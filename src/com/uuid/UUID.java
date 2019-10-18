@@ -11,31 +11,18 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
-/**
-* UUID 128-битный универсально уникальный идентификатор
-*
-*	   
-    *      
-    *      timeLow(ui4) - Четыре октета, младшие биты значения времени (32 бита)
-    *      
-    *      timeMid(ui2) - Два октета, средние биты значения времени (16 битов) 
-    *      
-    *      timeHiAndVersion(ui2) - Два октета, 4 бита с последующими старшими битами значения времени (12 битов)
-    *      
-    *      clockSeqHiAndReserved(ui1) - Один октет, Биты варианта ( 2 бита ) с последующими старшими битами временной последовательности (6 битов)
-    *      
-    *      clockSeqLow(ui1) - Один октет , младшие биты временной последовательности
-    *      
-    *      nodeId (u_i1[6]) - Шесть октетов, Узел 48 битов 
-    *      
-*
+/*
+UUID 128-битный универсально уникальный идентификатор
+timeLow(ui4) - Четыре октета, младшие биты значения времени (32 бита)
+timeMid(ui2) - Два октета, средние биты значения времени (16 битов) 
+timeHiAndVersion(ui2) - Два октета, 4 бита с последующими старшими битами значения времени (12 битов)
+clockSeqHiAndReserved(ui1) - Один октет, Биты варианта ( 2 бита ) с последующими старшими битами временной последовательности (6 битов)
+clockSeqLow(ui1) - Один октет , младшие биты временной последовательности
+nodeId (u_i1[6]) - Шесть октетов, Узел 48 битов 
 */
 
-
-public class UUID implements Comparable, Serializable
-{
+public class UUID implements Comparable, Serializable {
     public static final int STRING_LENGTH = 36;
-
     private int 	timeLow;
     private short	timeMid;
     private short 	timeHiAndVersion;
@@ -59,9 +46,8 @@ public class UUID implements Comparable, Serializable
         str = str.toLowerCase();
         long sum = 0;
         int index = 1; 
-        for(int i = 0; i < str.toCharArray().length; i++)
-        {
-           char ch = str.toCharArray()[i];
+        for(int i = 0; i < str.toCharArray().length; i++) {
+        char ch = str.toCharArray()[i];
             if(ch>='0' && ch<='9'){
                     //увеличение суммы и индекса
                     sum+=(ch-'0')*(index++);
@@ -70,16 +56,15 @@ public class UUID implements Comparable, Serializable
                     //увеличение суммы и индекса
                     sum+=(ch-'a'+10)*(index++);
             }
-            if(index>10) index=1;           
-           
+            if(index>10) index=1;
         }
 
         int r = (int) (sum % 16);
         if (r<10){
-		return (char)(r+'0');
+            return (char)(r+'0');
 	} else {
-		return (char)(r+'a'-10);
-	}        
+            return (char)(r+'a'-10);
+	}     
     }
     
     /**
@@ -344,32 +329,37 @@ public class UUID implements Comparable, Serializable
 	}
 		
 	/** произвольное время */
-	private void getClockSequence()
-	{
+	private void getClockSequence() {
 	    clockSequence = random1.nextInt() & CLOCK_SEQ_MASK;
 	    if (clockSequence == 0)
 		clockSequence++;
 	}
-			
 		
 	/** случайным образом генерировать идентификатор узла. сделать последние два байта 
 	* 0xAA77, который не может конфликтовать с реальным адресом Ethernet */
-	private void initializeNodeId()
-	{
+	private void initializeNodeId() {
+            // геренация через случайное число                  
+            /*
 	    byte barr[] = new byte[2];
-
 	    Random r1 = new Random();
 	    Random r2 = new Random(r1.hashCode());
 	    r1.nextBytes(barr);
 	    nodeId[0] = barr[0];
 	    nodeId[1] = barr[1];
-
 	    r2.nextBytes(barr);
 	    nodeId[2] = barr[0];
 	    nodeId[3] = barr[1];
-
 	    nodeId[4] = (byte)0xaa;
 	    nodeId[5] = 0x77;
+            */
+            // Генерация через MAC адрес            
+            // 8C-DC-D4-55-16-C5 MAC адрес
+            nodeId[0]=(byte)0x8c;  
+            nodeId[1]=(byte)0xdc;
+            nodeId[2]=(byte)0xd4;
+            nodeId[3]=(byte)0x55;
+            nodeId[4]=(byte)0x17;
+            nodeId[5]=(byte)0xc4;
 	}
     }
 }
